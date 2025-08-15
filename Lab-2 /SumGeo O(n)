@@ -1,0 +1,25 @@
+#include <iostream>
+using namespace std;
+
+double SumGeoSeriesLoop(double a, double r, int n) {
+    double sum = 0;
+    double term = a;
+    for (int i = 1; i <= n; i++) {
+        sum += term;
+        term *= r; 
+    }
+    return sum;
+}
+int main() {
+    double a, r;
+    int n;
+    cout << "Enter first term (a): ";
+    cin >> a;
+    cout << "Enter common ratio (r): ";
+    cin >> r;
+    cout << "Enter number of terms (n): ";
+    cin >> n;
+
+    cout << "Sum using O(n) loop: " << SumGeoSeriesLoop(a, r, n) << endl;
+    return 0;
+}
