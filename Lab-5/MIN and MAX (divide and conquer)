@@ -1,0 +1,46 @@
+#include <iostream> 
+using namespace std; 
+ 
+ 
+struct Result { 
+    int minVal; 
+    int maxVal; 
+}; 
+ 
+ 
+Result findMinMax(int arr[], int low, int high) { 
+    Result res, left, right; 
+ 
+    if (low == high) { 
+        res.minVal = arr[low]; 
+        res.maxVal = arr[low]; 
+        return res; 
+    } 
+ 
+    if (high == low + 1) { 
+        if (arr[low] < arr[high]) { 
+            res.minVal = arr[low]; 
+            res.maxVal = arr[high]; 
+        } else { 
+            res.minVal = arr[high]; 
+            res.maxVal = arr[low]; 
+        } 
+        return res; 
+    } 
+ 
+     
+    int mid = (low + high) / 2; 
+    left = findMinMax(arr, low, mid); 
+right = findMinMax(arr, mid + 1, high); 
+res.minVal = (left.minVal < right.minVal) ? left.minVal : right.minVal; 
+res.maxVal = (left.maxVal > right.maxVal) ? left.maxVal : right.maxVal; 
+return res; 
+} 
+int main() { 
+int arr[] = {20, 5, 40, 10, 7, 30}; 
+int n = sizeof(arr) / sizeof(arr[0]); 
+Result ans = findMinMax(arr, 0, n - 1); 
+cout << "Minimum element: " << ans.minVal << endl; 
+cout << "Maximum element: " << ans.maxVal << endl; 
+return 0; 
+}
