@@ -1,0 +1,42 @@
+#include<stdio.h>
+#define MAX 100
+void swap(int *a,int *b){
+	int temp=*a;
+	*a=*b;
+	*b=temp;
+}
+int partitioning(int arr[],int low,int high){
+	int i=low-1;int j;
+	int pivot =arr[high];
+	for(j=low;j<high;j++){
+		if(arr[j]<=pivot){
+			i++;
+			swap(&arr[i],&arr[j]);
+		}
+	}
+	i++;
+	swap(&arr[high],&arr[i]);
+	return i;
+}
+void quicksort(int arr[],int low,int high){
+	if(low<high){
+		int mid=partitioning(arr,low,high);
+		quicksort(arr,low,mid-1);
+		quicksort(arr,mid+1,high);
+	}
+}
+int main(){
+    int i,n,arr[MAX];
+	printf("\nEnter no of element: ");
+	scanf("%d",&n);
+	printf("\nEnter the element: ");
+	for(i=0;i<n;i++){
+		scanf("%d",&arr[i]);
+	}
+	quicksort(arr,0,n-1);
+	printf("\nAfter Sorting: \n");
+	for(i=0;i<n;i++){
+		printf("%d\t",arr[i]);
+	}
+	return 0;
+}
