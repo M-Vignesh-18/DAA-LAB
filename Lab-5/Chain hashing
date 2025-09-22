@@ -1,0 +1,104 @@
+#include <stdio.h> 
+#include <stdlib.h> 
+#define M 10 
+struct Node { 
+    int data; 
+    struct Node* next; 
+}; 
+int hashFunction(int key) { 
+    return key % M; 
+} 
+void insert(int key, struct Node* hashTable[]) { 
+    int index = hashFunction(key); 
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node)); 
+    newNode->data = key; 
+    newNode->next = hashTable[index]; 
+    hashTable[index] = newNode; 
+    printf("%d inserted.\n", key); 
+} 
+void search(struct Node* hashTable[], int key) { 
+    int index = hashFunction(key); 
+    struct Node* temp = hashTable[index]; 
+    while (temp != NULL) { 
+        if (temp->data == key) { 
+            printf("Element %d was found.\n", key); 
+            return; 
+        } 
+        temp = temp->next; 
+    } 
+    printf("Element %d was not found.\n", key); 
+} 
+void deleteKey(struct Node* hashTable[], int key) { 
+    int index = hashFunction(key); 
+    struct Node* temp = hashTable[index]; 
+    struct Node* prev = NULL; 
+ 
+    while (temp != NULL) { 
+        if (temp->data == key) { 
+            if (prev == NULL) { 
+                hashTable[index] = temp->next; 
+            } else { 
+                prev->next = temp->next; 
+            } 
+            free(temp); 
+            printf("Element %d deleted.\n", key); 
+            return; 
+        } 
+        prev = temp; 
+        temp = temp->next; 
+    } 
+    printf("Element %d not found.\n", key); 
+} 
+void display(struct Node* hashTable[]) { 
+ int i; 
+    for ( i = 0; i < M; i++) { 
+        printf("HashTable[%d]: ", i); 
+        struct Node* temp = hashTable[i]; 
+        while (temp != NULL) { 
+            printf("%d -> ", temp->data); 
+            temp = temp->next; 
+        } 
+        printf("NULL\n"); 
+    } 
+} 
+int main() { 
+    struct Node* hashTable[M] = {NULL};  
+    int choice, ele; 
+     printf("\n--- Hash Table Menu ---\n"); 
+        printf("1. Insert\n"); 
+        printf("2. Search\n"); 
+        printf("3. Delete\n"); 
+        printf("4. Display\n"); 
+        printf("5. Exit\n"); 
+    while (1) { 
+        
+        printf("Enter your choice: "); 
+        scanf("%d", &choice); 
+ 
+        switch (choice) { 
+            case 1: 
+                printf("Enter element to insert: "); 
+                scanf("%d", &ele); 
+                insert(ele, hashTable); 
+                break; 
+            case 2: 
+                printf("Enter element to search: "); 
+                scanf("%d", &ele); 
+                search(hashTable, ele); 
+                break; 
+            case 3: 
+                printf("Enter element to delete: "); 
+                scanf("%d", &ele); 
+                deleteKey(hashTable, ele); 
+                break; 
+            case 4: 
+                display(hashTable); 
+                break; 
+            case 5: 
+                exit(0); 
+            default: 
+                printf("Invalid choice!\n"); 
+        } 
+    } 
+    return 0; 
+} 
