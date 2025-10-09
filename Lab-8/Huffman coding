@@ -1,0 +1,97 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+struct Node {
+    char ch;
+    int freq;
+    Node *left, *right;
+};
+
+Node* createNode(char c, int f) {
+    Node* node = new Node;
+    node->ch = c;
+    node->freq = f;
+    node->left = node->right = NULL;
+    return node;
+}
+
+void sortByFrequency(char chars[], int freq[], int n) {
+    for (int i = 0; i < n - 1; ++i) {
+        for (int j = i + 1; j < n; ++j) {
+            if (freq[i] > freq[j]) {
+                swap(freq[i], freq[j]);
+                swap(chars[i], chars[j]);
+            }
+        }
+    }
+}
+
+int findMin(Node* arr[], int n) {
+    int minIndex = -1;
+    for (int i = 0; i < n; i++) {
+        if (arr[i] != NULL) {
+            if (minIndex == -1 || 
+               (arr[i]->freq < arr[minIndex]->freq) || 
+               (arr[i]->freq == arr[minIndex]->freq && arr[i]->ch < arr[minIndex]->ch)) {
+                minIndex = i;
+            }
+        }
+    }
+    return minIndex;
+}
+
+void printCodes(Node* root, string code) {
+    if (root == NULL) return;
+    if (root->left == NULL && root->right == NULL) {
+        cout << root->ch << " : " << code << endl;
+        return;
+    }
+    printCodes(root->left, code + "0");
+    printCodes(root->right, code + "1");
+}
+
+int main() {
+    char chars[] = {'a','c','d','e','o','m','s','t','u'};
+    int freq[]   = {20,11,2,10,15,8,10,22,2};
+    int n = 9;
+
+    sortByFrequency(chars, freq, n);
+
+    Node* arr[50]; 
+    for (int i = 0; i < n; i++) {
+        arr[i] = createNode(chars[i], freq[i]);
+    }
+
+    while (true) {
+        int i1 = findMin(arr, n); 
+        if (i1 == -1) break;
+        Node* min1 = arr[i1];
+        arr[i1] = NULL;
+
+        int i2 = findMin(arr, n);
+        if (i2 == -1) {
+            arr[i1] = min1; 
+            break;
+        }
+        Node* min2 = arr[i2];
+        arr[i2] = NULL;
+
+        Node* newNode = createNode('$', min1->freq + min2->freq);
+        newNode->left = min1;
+        newNode->right = min2;
+        arr[i1] = newNode;
+    }
+
+    Node* root = NULL;
+    for (int i = 0; i < n; i++) {
+        if (arr[i] != NULL) {
+            root = arr[i];
+            break;
+        }
+    }
+
+    cout << "Huffman Codes:\n";
+    printCodes(root, "");
+    return 0;
+}
