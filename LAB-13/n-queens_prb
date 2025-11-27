@@ -1,0 +1,77 @@
+#include &lt;iostream&gt;
+using namespace std;
+
+int board[20][20];
+int n;
+int solved = 0;
+
+int isSafe(int row, int col) {
+for (int i = 0; i &lt; row; i++) {
+if (board[i][col] == 1)
+return 0;
+}
+
+for (int i = row - 1, j = col - 1; i &gt;= 0 &amp;&amp; j &gt;= 0; i--, j--) {
+if (board[i][j] == 1)
+return 0;
+}
+
+for (int i = row - 1, j = col + 1; i &gt;= 0 &amp;&amp; j &lt; n; i--, j++) {
+if (board[i][j] == 1)
+return 0;
+}
+
+return 1;
+}
+
+void printBoard() {
+for (int i = 0; i &lt; n; i++) {
+for (int j = 0; j &lt; n; j++) {
+
+if (board[i][j])
+cout &lt;&lt; &quot;Q &quot;;
+else
+cout &lt;&lt; &quot;. &quot;;
+}
+cout &lt;&lt; &quot;\n&quot;;
+}
+cout &lt;&lt; &quot;\n&quot;;
+}
+
+void n_queen(int row) {
+if (solved) return;
+
+if (row == n) {
+printBoard();
+solved = 1;
+return;
+}
+
+for (int col = 0; col &lt; n; col++) {
+if (isSafe(row, col)) {
+board[row][col] = 1;
+n_queen(row + 1);
+if (solved) return;
+board[row][col] = 0;
+}
+}
+}
+
+int main() {
+cout &lt;&lt; &quot;Enter n: &quot;;
+
+cin &gt;&gt; n;
+
+for (int i = 0; i &lt; n; i++)
+for (int j = 0; j &lt; n; j++)
+board[i][j] = 0;
+
+n_queen(0);
+
+if (solved)
+cout &lt;&lt; &quot;SOLUTION FOUND\n&quot;;
+else
+cout &lt;&lt; &quot;NO SOLUTION EXISTS\n&quot;;
+
+return 0;
+}
